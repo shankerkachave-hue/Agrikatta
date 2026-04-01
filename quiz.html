@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSNM उद्यान सहाय्यक - प्रश्न सिरीज</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #667eea;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        #timer {
+            font-size: 2rem;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .question-container {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .option-label:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.3s;
+            min-width: 150px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #quizForm {
+            display: block;
+        }
+
+        #result {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .result-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .result-item-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .result-item-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.3rem;
+            }
+
+            .quiz-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .score-display {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🌿 CSNM उद्यान सहाय्यक परीक्षा</h1>
+        <p>छत्रपती संभाजीनगर महानगरपालिका</p>
+    </header>
+
+    <div class="quiz-info">
+        <div class="info-item">
+            <div class="info-label">एकूण प्रश्न</div>
+            <div class="info-value">20</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">वेळ</div>
+            <div class="info-value" id="timer">15:00</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">एकूण गुण</div>
+            <div class="info-value">100</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">प्रति प्रश्न</div>
+            <div class="info-value">5</div>
+        </div>
+    </div>
+
+    <form id="quizForm">
+        <!-- Questions will be generated by JavaScript -->
+    </form>
+
+    <div id="result">
+        <div class="result-box">
+            <div class="result-title">परीक्षा पूर्ण!</div>
+            <div class="score-display" id="scoreDisplay">0/100</div>
+            <div class="message" id="resultMessage"></div>
+            <div class="result-details">
+                <div class="result-item">
+                    <div class="result-item-label">सही उत्तर</div>
+                    <div class="result-item-value" id="correctCount">0</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-item-label">गलत उत्तर</div>
+                    <div class="result-item-value" id="wrongCount">0</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-item-label">न केलेले</div>
+                    <div class="result-item-value" id="unattemptedCount">0</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-item-label">सटीकता</div>
+                    <div class="result-item-value" id="accuracyCount">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="button" onclick="window.print()">📥 उत्तर पत्र डाउनलोड करा</button>
+            <button type="button" onclick="resetQuiz()">🔄 दोबारा शुरू करा</button>
+        </div>
+    </div>
+
+    <div class="button-group" id="buttonGroup">
+        <button type="button" onclick="submitQuiz()">✓ परीक्षा सबमिट करा</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 CSNM उद्यान विभाग | सर्व हक्क राक्षित</p>
+    </footer>
+</div>
+
+<script>
+    // सर्व 20 प्रश्न
+    const questions = [
+        {
+            question: "गेलार्डियाच्या फुलाला परदेशात कोणत्या नावाने ओळखले जाते?",
+            options: ["ब्लँकेट फ्लॉवर", "ड्रॅगन्स माउथ", "बेबी ब्रेथ", "स्टार फ्लॉवर"],
+            correct: 0
+        },
+        {
+            question: "कोणते वनस्पति कीटकनाशक म्हणून वापरले जाते?",
+            options: ["लगद", "निर्गुंडी", "कडवेली", "बोहोसिया"],
+            correct: 1
+        },
+        {
+            question: "तुळसीचे वैज्ञानिक नाव काय आहे?",
+            options: ["ओसिमम सँक्टम", "मेन्था अरवेन्सिस", "सॅल्विया ऑफिसिनेलिस", "अलोए बार्बाडेन्सिस"],
+            correct: 0
+        },
+        {
+            question: "ऋतुमानी फूलांपैकी कोणता सर्वात टिकाऊ आहे?",
+            options: ["गुलाब", "गजानिया", "गुलदाउदी", "पेटूनिया"],
+            correct: 2
+        },
+        {
+            question: "डॅहलियाचे गुणक कोणते आहेत?",
+            options: ["बीज", "कंद", "स्टेम कटिंग", "सर्व"],
+            correct: 3
+        },
+        {
+            question: "लॅव्हेंडरचा वापर कोणासाठी केला जातो?",
+            options: ["सुगंध", "औषधि", "सौंदर्य", "सर्व"],
+            correct: 3
+        },
+        {
+            question: "ऑर्किडचा सर्वाधिक उपयुक्त तापमान कोणता आहे?",
+            options: ["15-20°C", "20-25°C", "25-30°C", "30-35°C"],
+            correct: 1
+        },
+        {
+            question: "कोणते वनस्पति हवेची गुणवत्ता सुधारते?",
+            options: ["पोथोस", "स्पाइडर प्लांट", "स्नेक प्लांट", "सर्व"],
+            correct: 3
+        },
+        {
+            question: "गुलदाउदीचे रोपण कोणत्या ऋतूमध्ये केले जाते?",
+            options: ["गर्मी", "हिवाळा", "वर्षा", "शरद"],
+            correct: 2
+        },
+        {
+            question: "जिप्सोफिलाचे सामान्य नाव काय आहे?",
+            options: ["बेबी ब्रेथ", "ब्लीडिंग हार्ट", "ब्लिसिंग ब्लॅकॉर्न", "बेबी स्टार"],
+            correct: 0
+        },
+        {
+            question: "कोणते वनस्पति छायांमध्ये वाढू शकते?",
+            options: ["गुलाब", "पोथोस", "साल्विया", "जिनिया"],
+            correct: 1
+        },
+        {
+            question: "गुलाबांमध्ये पाकळ्यांचे रंग कोणावर अवलंबून असते?",
+            options: ["तापमान", "��ातीचा pH", "प्रकाश", "सर्व"],
+            correct: 3
+        },
+        {
+            question: "कोणते खते जैविक खते मानले जाते?",
+            options: ["यूरिया", "गोमूत्र", "DAP", "पोटॅश"],
+            correct: 1
+        },
+        {
+            question: "आयुष्पत्रीचा वापर कोणासाठी केला जातो?",
+            options: ["सुगंध", "औषधि", "पराग", "हरियाली"],
+            correct: 1
+        },
+        {
+            question: "कोणते वनस्पति विषारी आहे?",
+            options: ["डिजिटेलिस", "तुळसी", "गुलाब", "जास्मिन"],
+            correct: 0
+        },
+        {
+            question: "हायाचिंथचे रंग कोणता सर्वात दुर्मिळ आहे?",
+            options: ["पांढरा", "निळा", "गुलाबी", "लाल"],
+            correct: 3
+        },
+        {
+            question: "जिरेनियमचे गुणक कोणते आहेत?",
+            options: ["बीज", "कटिंग", "बल्ब", "कंद"],
+            correct: 1
+        },
+        {
+            question: "कोणता फूल रात्री खिलता आहे?",
+            options: ["गुलाब", "रजनीगंधा", "गुलदाउदी", "गजानिया"],
+            correct: 1
+        },
+        {
+            question: "वनस्पती पोषक तत्वांपैकी कोणता सर्वात महत्वाचा आहे?",
+            options: ["नायट्रोजन", "फॉस्फोरस", "पोटॅशियम", "सर्व समान"],
+            correct: 3
+        },
+        {
+            question: "बोन्साई कला कोणत्या देशातून आली?",
+            options: ["भारत", "जपान", "चीन", "थायलँड"],
+            correct: 1
+        }
+    ];
+
+    let currentAnswers = new Array(questions.length).fill(null);
+    let timeLeft = 15 * 60;
+    let quizSubmitted = false;
+
+    // Initialize quiz
+    function initializeQuiz() {
+        const form = document.getElementById('quizForm');
+        form.innerHTML = '';
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-container';
+            
+            let optionsHtml = '<div class="options">';
+            q.options.forEach((option, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label">
+                        <input type="radio" name="q${index}" value="${optIndex}" onchange="updateAnswer(${index}, ${optIndex})">
+                        <span>${String.fromCharCode(65 + optIndex)}) ${option}</span>
+                    </label>
+                `;
+            });
+            optionsHtml += '</div>';
+
+            questionDiv.innerHTML = `
+                <div class="question-number">प्रश्न ${index + 1} (${q.options.length} पर्याय)</div>
+                <div class="question-text">${q.question}</div>
+                ${optionsHtml}
+            `;
+            form.appendChild(questionDiv);
+        });
+
+        startTimer();
+    }
+
+    function updateAnswer(questionIndex, optionIndex) {
+        currentAnswers[questionIndex] = optionIndex;
+    }
+
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        const timerInterval = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    function submitQuiz() {
+        if (quizSubmitted) return;
+        quizSubmitted = true;
+
+        let correct = 0;
+        let wrong = 0;
+        let unattempted = 0;
+
+        currentAnswers.forEach((answer, index) => {
+            if (answer === null) {
+                unattempted++;
+            } else if (answer === questions[index].correct) {
+                correct++;
+            } else {
+                wrong++;
+            }
+        });
+
+        const score = correct * 5;
+        const accuracy = Math.round((correct / questions.length) * 100);
+
+        // Display results
+        document.getElementById('quizForm').style.display = 'none';
+        document.getElementById('buttonGroup').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+
+        document.getElementById('scoreDisplay').textContent = `${score}/100`;
+        document.getElementById('correctCount').textContent = correct;
+        document.getElementById('wrongCount').textContent = wrong;
+        document.getElementById('unattemptedCount').textContent = unattempted;
+        document.getElementById('accuracyCount').textContent = `${accuracy}%`;
+
+        let message = '';
+        if (accuracy >= 80) message = '🎉 शानदार! आप बहुत अच्छा प्रदर्शन कर रहे हैं।';
+        else if (accuracy >= 60) message = '👍 अच्छा! थोड़ा और प्रयास करें।';
+        else if (accuracy >= 40) message = '📚 आपको अधिक अभ्यास की आवश्यकता है।';
+        else message = '💪 फिर से प्रयास करें, आप सफल हो सकते हैं!';
+
+        document.getElementById('resultMessage').textContent = message;
+    }
+
+    function resetQuiz() {
+        location.reload();
+    }
+
+    // Start quiz
+    initializeQuiz();
+</script>
+
+</body>
+</html>
